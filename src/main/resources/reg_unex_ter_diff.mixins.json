@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "net.mcreator.regunexterdiff.mixins",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "yourmodid.refmap.json",
+  "mixins": [
+    "TerrainDiffusionBridge"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

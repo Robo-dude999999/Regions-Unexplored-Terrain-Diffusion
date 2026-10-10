@@ -1,0 +1,51 @@
+{
+  "mod_elements": [
+    {
+      "name": "TerrainDiffusionBridge",
+      "type": "code",
+      "compiles": true,
+      "locked_code": true,
+      "registry_name": "terrain_diffusion_bridge",
+      "metadata": {
+        "files": [
+          "src/main/java/net/mcreator/regunexterdiff/TerrainDiffusionBridge.java"
+        ]
+      }
+    }
+  ],
+  "variable_elements": [],
+  "sound_elements": [],
+  "tag_elements": {},
+  "tab_element_order": {},
+  "language_map": {
+    "en_us": {}
+  },
+  "metadata": {
+    "files": [
+      "src/main/resources/META-INF/neoforge.mods.toml",
+      "src/main/resources/pack.mcmeta",
+      "src/main/java/net/mcreator/regunexterdiff/RegUnexTerDiffMod.java"
+    ]
+  },
+  "foldersRoot": {
+    "name": "~",
+    "children": []
+  },
+  "workspaceSettings": {
+    "modid": "reg_unex_ter_diff",
+    "modName": "Regions Unexplored: Terrain Diffusion",
+    "version": "1.0.0",
+    "author": "MCreator",
+    "websiteURL": "https://mcreator.net",
+    "license": "Not specified",
+    "serverSideOnly": false,
+    "requiredMods": [],
+    "dependencies": [],
+    "dependants": [],
+    "mcreatorDependencies": [],
+    "currentGenerator": "neoforge-1.21.1",
+    "credits": "Created using mod maker MCreator - https://mcreator.net/about",
+    "modElementsPackage": "net.mcreator.regunexterdiff"
+  },
+  "mcreatorVersion": 202600114619
+}
