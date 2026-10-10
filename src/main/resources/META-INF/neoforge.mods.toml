@@ -1,16 +1,27 @@
 modLoader="javafml"
 loaderVersion="[4,)"
-license="Not specified"
+license="MIT"
 
 [[mods]]
 modId="reg_unex_ter_diff"
-version="1.0.0"
+version="1.0.1"
 displayName="Regions Unexplored: Terrain Diffusion"
-displayURL="https://mcreator.net"
-credits="Created using mod maker MCreator - https://mcreator.net/about"
-authors="MCreator"
+description="Compatibility layer for Regions Unexplored and Terrain Diffusion on Minecraft 1.21.1."
+authors="Robo-dude999999"
 
-# Start of user code block mod configuration
+[[dependencies.reg_unex_ter_diff]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.reg_unex_ter_diff]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.255,21.2)"
+ordering="NONE"
+side="BOTH"
 
 [[dependencies.reg_unex_ter_diff]]
 modId="regions_unexplored"
@@ -19,44 +30,16 @@ versionRange="[0.6.2,)"
 ordering="AFTER"
 side="BOTH"
 
-# Force the mod to load AFTER Terrain Diffusion
 [[dependencies.reg_unex_ter_diff]]
 modId="terrain_diffusion_mc"
 type="required"
-versionRange="[2.3.0,)"
+versionRange="[2.3.0,2.4)"
 ordering="AFTER"
 side="BOTH"
 
-# Force the mod to load AFTER Lithostitched
 [[dependencies.reg_unex_ter_diff]]
 modId="lithostitched"
 type="required"
 versionRange="[1.8.0,)"
 ordering="AFTER"
 side="BOTH"
-
-# End of user code block mod configuration
-
-
-# Start of user code block custom mixins
-# End of user code block custom mixins
-
-[[dependencies.reg_unex_ter_diff]]
-modId="neoforge"
-type="required"
-versionRange="[21.1.190,)"
-ordering="AFTER"
-side="BOTH"
-
-[[dependencies.reg_unex_ter_diff]]
-modId="minecraft"
-type="required"
-versionRange="[1.21.1]"
-ordering="AFTER"
-side="BOTH"
-
-
-
-
-# Start of user code block dependencies configuration
-# End of user code block dependencies configuration
