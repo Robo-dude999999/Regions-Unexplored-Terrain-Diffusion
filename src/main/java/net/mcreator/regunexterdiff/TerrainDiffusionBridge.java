@@ -1,13 +1,11 @@
 package net.mcreator.regunexterdiff.mixins;
 
-import com.github.xandergos.terraindiffusionmc.world.TerrainDiffusionBiomeSource;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -30,10 +28,9 @@ import java.util.Optional;
  * classes and it does not assume a biome exists just because its key is known.
  */
 @Pseudo
-@Mixin(value = TerrainDiffusionBiomeSource.class, remap = false)
+@Mixin(targets = "com.github.xandergos.terraindiffusionmc.world.TerrainDiffusionBiomeSource", remap = false)
 public abstract class TerrainDiffusionBridge {
     @Shadow
-    @Final
     private HolderGetter<Biome> biomeLookup;
 
     @Shadow
