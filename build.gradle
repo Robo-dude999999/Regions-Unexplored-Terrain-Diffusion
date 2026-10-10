@@ -3,18 +3,17 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.141'
 }
 
-version = '1.0'
-base.archivesName = "modid"
+version = '1.0.1'
+base.archivesName = "regions-unexplored-terrain-diffusion"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {
-    version = "21.1.190"
+    version = "21.1.255"
 
     runs {
         client {
             client()
-
             def mcreatorJvmOptions = System.getenv('MCREATOR_JVM_OPTIONS')
             if (mcreatorJvmOptions) {
                 mcreatorJvmOptions.split("\\s+").findAll { it.trim() }.each { arg ->
@@ -25,7 +24,6 @@ neoForge {
         server {
             server()
         }
-
         configureEach {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             logLevel = org.slf4j.event.Level.DEBUG
@@ -40,7 +38,15 @@ neoForge {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Jar).configureEach {
+    manifest {
+        attributes([
+            'MixinConfigs': 'reg_unex_ter_diff.mixins.json'
+        ])
+    }
 }
 
 apply from: 'mcreator.gradle'
@@ -49,8 +55,11 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly 'org.spongepowered:mixin:0.8.7'
+    annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
 }
