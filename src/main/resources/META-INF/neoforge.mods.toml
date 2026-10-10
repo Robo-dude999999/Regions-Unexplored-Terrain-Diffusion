@@ -31,6 +31,13 @@ ordering="AFTER"
 side="BOTH"
 
 [[dependencies.reg_unex_ter_diff]]
+modId="terrain_diffusion_mc"
+type="required"
+versionRange="[2.3.0,2.4)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.reg_unex_ter_diff]]
 modId="lithostitched"
 type="required"
 versionRange="[1.8.0,)"
