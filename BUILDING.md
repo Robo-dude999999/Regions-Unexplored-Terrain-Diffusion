@@ -5,7 +5,7 @@ This project now has two build targets. Each target produces a distinct JAR beca
 ## Minecraft 1.21.1
 
 ```bash
-./gradlew -PmcTarget=1.21.1 build
+bash ./gradlew -PmcTarget=1.21.1 build
 ```
 
 The output is written to `build/libs/regions-unexplored-terrain-diffusion-mc1.21.1-1.0.2.jar`.
