@@ -3,13 +3,47 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.141'
 }
 
-version = '1.0.1'
-base.archivesName = "regions-unexplored-terrain-diffusion"
+version = '1.0.2'
+
+/*
+ * Build a separate artifact for each Minecraft/NeoForge line:
+ *   ./gradlew -PmcTarget=1.21.1 build
+ *   ./gradlew -PmcTarget=1.21.11 build
+ * Override the 1.21.11 NeoForge version with -PneoForgeVersion=... if needed.
+ */
+def mcTarget = providers.gradleProperty('mcTarget').getOrElse('1.21.1')
+def targetConfigs = [
+    '1.21.1': [
+        neoForgeVersion: '21.1.255',
+        minecraftVersionRange: '[1.21.1,1.21.2)',
+        neoForgeVersionRange: '[21.1.255,21.2)',
+        regionsUnexploredType: 'required',
+        regionsUnexploredVersionRange: '[0.6.2,)',
+        lithostitchedVersionRange: '[1.7.9,)'
+    ],
+    '1.21.11': [
+        neoForgeVersion: providers.gradleProperty('neoForgeVersion').getOrElse('21.11.0-beta'),
+        minecraftVersionRange: '[1.21.11,1.21.12)',
+        neoForgeVersionRange: '[21.11.0-beta,21.12)',
+        // Regions Unexplored does not currently publish an official 1.21.11 NeoForge build.
+        // Keep this dependency optional so the 1.21.11 artifact can load without RU;
+        // RU biome remapping only activates if a compatible RU port registers those keys.
+        regionsUnexploredType: 'optional',
+        regionsUnexploredVersionRange: '[0.6.2,)',
+        lithostitchedVersionRange: '[1.7.2,)'
+    ]
+]
+if (!targetConfigs.containsKey(mcTarget)) {
+    throw new GradleException("Unsupported -PmcTarget=${mcTarget}. Choose 1.21.1 or 1.21.11.")
+}
+def target = targetConfigs[mcTarget]
+
+base.archivesName = "regions-unexplored-terrain-diffusion-mc${mcTarget}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {
-    version = "21.1.255"
+    version = target.neoForgeVersion
 
     runs {
         client {
@@ -44,8 +78,31 @@ tasks.withType(JavaCompile).configureEach {
 tasks.withType(Jar).configureEach {
     manifest {
         attributes([
-            'MixinConfigs': 'reg_unex_ter_diff.mixins.json'
+            'MixinConfigs': 'reg_unex_ter_diff.mixins.json',
+            'Minecraft-Version': mcTarget,
+            'NeoForge-Version': target.neoForgeVersion
         ])
+    }
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    inputs.property('minecraftVersionRange', target.minecraftVersionRange)
+    inputs.property('neoForgeVersionRange', target.neoForgeVersionRange)
+    inputs.property('regionsUnexploredType', target.regionsUnexploredType)
+    inputs.property('regionsUnexploredVersionRange', target.regionsUnexploredVersionRange)
+    inputs.property('terrainDiffusionVersionRange', '[2.3.0,2.4)')
+    inputs.property('lithostitchedVersionRange', target.lithostitchedVersionRange)
+
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand(
+            minecraftVersionRange: target.minecraftVersionRange,
+            neoForgeVersionRange: target.neoForgeVersionRange,
+            regionsUnexploredType: target.regionsUnexploredType,
+            regionsUnexploredVersionRange: target.regionsUnexploredVersionRange,
+            terrainDiffusionVersionRange: '[2.3.0,2.4)',
+            lithostitchedVersionRange: target.lithostitchedVersionRange,
+            minecraftVersion: mcTarget
+        )
     }
 }
 
