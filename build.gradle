@@ -1,65 +1,56 @@
 plugins {
-    id 'eclipse'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'fabric-loom' version '1.8.13'
+    id 'maven-publish'
 }
 
-version = '1.0.1'
-base.archivesName = "regions-unexplored-terrain-diffusion"
+version = project.mod_version
+group = project.maven_group
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+base {
+    archivesName = project.archives_base_name
+}
 
-neoForge {
-    version = "21.1.255"
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.fabricmc.net/' }
+    maven { url = 'https://maven.terraformersmc.com/releases/' }
+}
 
-    runs {
-        client {
-            client()
-            def mcreatorJvmOptions = System.getenv('MCREATOR_JVM_OPTIONS')
-            if (mcreatorJvmOptions) {
-                mcreatorJvmOptions.split("\\s+").findAll { it.trim() }.each { arg ->
-                    jvmArgument(arg)
-                }
-            }
-        }
-        server {
-            server()
-        }
-        configureEach {
-            systemProperty 'forge.logging.markers', 'REGISTRIES'
-            logLevel = org.slf4j.event.Level.DEBUG
-        }
+loom {
+    mixin {
+        defaultRefmapName = 'reg_unex_ter_diff.refmap.json'
     }
+}
 
-    mods {
-        mcreator {
-            sourceSet sourceSets.main
-        }
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // No direct compile dependency on Terrain Diffusion: the compatibility mixin
+    // targets its class by name and safely no-ops when it is absent.
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft_version
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+               "minecraft_version": project.minecraft_version
     }
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+    it.options.release = 21
+    it.options.encoding = 'UTF-8'
 }
 
-tasks.withType(Jar).configureEach {
-    manifest {
-        attributes([
-            'MixinConfigs': 'reg_unex_ter_diff.mixins.json'
-        ])
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archives_base_name}" }
     }
-}
-
-apply from: 'mcreator.gradle'
-
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-}
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly 'org.spongepowered:mixin:0.8.7'
-    annotationProcessor 'org.spongepowered:mixin:0.8.7:processor'
 }
