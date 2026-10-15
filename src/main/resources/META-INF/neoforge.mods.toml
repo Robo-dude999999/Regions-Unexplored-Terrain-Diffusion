@@ -4,42 +4,42 @@ license="MIT"
 
 [[mods]]
 modId="reg_unex_ter_diff"
-version="1.0.1"
+version="1.0.2"
 displayName="Regions Unexplored: Terrain Diffusion"
-description="Compatibility layer for Regions Unexplored and Terrain Diffusion on Minecraft 1.21.1."
+description="Compatibility layer for Regions Unexplored and Terrain Diffusion on Minecraft ${minecraftVersion}."
 authors="Robo-dude999999"
 
 [[dependencies.reg_unex_ter_diff]]
 modId="minecraft"
 type="required"
-versionRange="[1.21.1]"
+versionRange="${minecraftVersionRange}"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.reg_unex_ter_diff]]
 modId="neoforge"
 type="required"
-versionRange="[21.1.255,21.2)"
+versionRange="${neoForgeVersionRange}"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.reg_unex_ter_diff]]
 modId="regions_unexplored"
-type="required"
-versionRange="[0.6.2,)"
+type="${regionsUnexploredType}"
+versionRange="${regionsUnexploredVersionRange}"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.reg_unex_ter_diff]]
 modId="terrain_diffusion_mc"
 type="required"
-versionRange="[2.3.0,2.4)"
+versionRange="${terrainDiffusionVersionRange}"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.reg_unex_ter_diff]]
 modId="lithostitched"
 type="required"
-versionRange="[1.8.0,)"
+versionRange="${lithostitchedVersionRange}"
 ordering="AFTER"
 side="BOTH"
