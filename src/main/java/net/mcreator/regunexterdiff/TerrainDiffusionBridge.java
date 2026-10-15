@@ -87,7 +87,8 @@ public abstract class TerrainDiffusionBridge {
 
     private static int mapFirstAvailable(Map<Object, Object> target, Object lookup, short terrainId, String... biomeNames)
             throws ReflectiveOperationException {
-        Method getMethod = lookup.getClass().getMethod("get", RegistryKey.class);
+        Class<?> lookupApi = Class.forName("net.minecraft.registry.RegistryEntryLookup");
+        Method getMethod = lookupApi.getMethod("get", RegistryKey.class);
         for (String biomeName : biomeNames) {
             RegistryKey<?> key = RegistryKey.of(RegistryKeys.BIOME, Identifier.of("regions_unexplored", biomeName));
             Object result = getMethod.invoke(lookup, key);
