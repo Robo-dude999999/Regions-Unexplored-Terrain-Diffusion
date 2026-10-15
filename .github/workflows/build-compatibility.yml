@@ -27,4 +27,4 @@ jobs:
           java-version: "21"
       - uses: gradle/actions/setup-gradle@v4
       - name: Compile and package
-        run: ./gradlew --no-daemon -PmcTarget=${{ matrix.mcTarget }} -PneoForgeVersion=${{ matrix.neoForgeVersion }} build
+        run: bash ./gradlew --no-daemon -PmcTarget=${{ matrix.mcTarget }} -PneoForgeVersion=${{ matrix.neoForgeVersion }} build
