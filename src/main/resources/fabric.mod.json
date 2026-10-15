@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "reg_unex_ter_diff",
+  "version": "${version}",
+  "name": "Regions Unexplored: Terrain Diffusion",
+  "description": "Fabric 1.21.1 compatibility bridge between Regions Unexplored and Terrain Diffusion.",
+  "authors": ["Robo-dude999999"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.mcreator.regunexterdiff.RegUnexTerDiffMod"
+    ]
+  },
+  "mixins": [
+    "reg_unex_ter_diff.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "${minecraft_version}",
+    "java": ">=21"
+  },
+  "suggests": {
+    "regions_unexplored": "*",
+    "terrain-diffusion-mc": "*"
+  }
+}
