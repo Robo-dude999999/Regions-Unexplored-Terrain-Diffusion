@@ -16,7 +16,7 @@
     "reg_unex_ter_diff.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.16.10",
+    "fabricloader": ">=0.18.1",
     "minecraft": "${minecraft_version}",
     "java": ">=21"
   },
