@@ -3,31 +3,32 @@ package net.mcreator.regunexterdiff.worldgen;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * A data-pack rule that maps raw Terrain Diffusion elevation/climate channels
- * to a registered biome. Climate channels are the four planes supplied to
- * BiomeClassifier, before its native classification noise is applied.
+ * A data-pack rule that maps Terrain Diffusion's raw elevation and climate
+ * channels to a registered biome. Climate channel names match the ordering
+ * documented in BiomeClassifier: temp, t_season, precip, and p_cv.
  */
 public record CustomBiomeRule(
         ResourceLocation definitionId,
         ResourceLocation biomeKey,
         int priority,
         NumericRange elevation,
-        NumericRange climateVarOne,
-        NumericRange climateVarTwo,
-        NumericRange climateVarThree,
-        NumericRange climateVarFour
+        NumericRange temp,
+        NumericRange tSeason,
+        NumericRange precip,
+        NumericRange pCv
 ) {
-    public boolean matches(float elevationValue, float one, float two, float three, float four) {
+    public boolean matches(float elevationValue, float tempValue, float tSeasonValue,
+                           float precipValue, float pCvValue) {
         return Float.isFinite(elevationValue)
-                && Float.isFinite(one)
-                && Float.isFinite(two)
-                && Float.isFinite(three)
-                && Float.isFinite(four)
+                && Float.isFinite(tempValue)
+                && Float.isFinite(tSeasonValue)
+                && Float.isFinite(precipValue)
+                && Float.isFinite(pCvValue)
                 && elevation.contains(elevationValue)
-                && climateVarOne.contains(one)
-                && climateVarTwo.contains(two)
-                && climateVarThree.contains(three)
-                && climateVarFour.contains(four)
+                && temp.contains(tempValue)
+                && tSeason.contains(tSeasonValue)
+                && precip.contains(precipValue)
+                && pCv.contains(pCvValue)
                 && HydraulicIsolation.allows(biomeKey, elevationValue, elevation);
     }
 
