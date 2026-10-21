@@ -44,7 +44,15 @@ public final class BiomeRuleReloadListener extends SimpleJsonResourceReloadListe
         }
 
         BiomeRuleRegistry.replaceRules(loaded);
-        RegUnexTerDiffMod.LOGGER.info("Loaded {} Terrain Diffusion biome compatibility rule(s)", loaded.size());
+        if (loaded.isEmpty()) {
+            RegUnexTerDiffMod.LOGGER.warn(
+                    "No valid Terrain Diffusion biome JSON rules could be loaded. "
+                            + "World generation will use minecraft:the_void as the fallback biome everywhere. "
+                            + "This is non-fatal; add or fix files under data/<namespace>/terrain_diffusion_biomes/."
+            );
+        } else {
+            RegUnexTerDiffMod.LOGGER.info("Loaded {} Terrain Diffusion biome compatibility rule(s)", loaded.size());
+        }
     }
 
     private static CustomBiomeRule parse(ResourceLocation definitionId, JsonElement element) {
