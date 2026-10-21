@@ -84,10 +84,10 @@ public final class BiomeRuleReloadListener extends SimpleJsonResourceReloadListe
                 biomeKey,
                 priority,
                 readRange(json, "elevation"),
-                readRange(json, "climate_var_one"),
-                readRange(json, "climate_var_two"),
-                readRange(json, "climate_var_three"),
-                readRange(json, "climate_var_four")
+                readRange(json, "temp"),
+                readRange(json, "t_season"),
+                readRange(json, "precip"),
+                readRange(json, "p_cv")
         );
     }
 
