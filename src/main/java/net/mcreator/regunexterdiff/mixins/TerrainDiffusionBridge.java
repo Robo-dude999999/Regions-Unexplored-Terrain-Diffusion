@@ -35,9 +35,6 @@ public abstract class TerrainDiffusionBridge {
     @Unique
     private Map<Short, Holder<Biome>> regUnexTerDiff$baseBiomeIdMap;
 
-    @Unique
-    private final Set<ResourceLocation> regUnexTerDiff$warnedMissingBiomes = new HashSet<>();
-
     @Inject(method = "requireBiomeIdMap", at = @At("TAIL"), remap = false)
     private void regUnexTerDiff$applyConfiguredBiomes(CallbackInfo ci) {
         if (biomeIdMap == null || biomeLookup == null) {
@@ -58,7 +55,7 @@ public abstract class TerrainDiffusionBridge {
             if (holder.isPresent()) {
                 mapped.put(entry.getValue(), holder.get());
                 availableKeys.add(entry.getKey());
-            } else if (regUnexTerDiff$warnedMissingBiomes.add(entry.getKey())) {
+            } else if (BiomeRuleRegistry.markMissingBiomeWarning(entry.getKey())) {
                 RegUnexTerDiffMod.LOGGER.warn(
                         "Terrain Diffusion biome rule references missing biome '{}'; rules for this key will be skipped",
                         entry.getKey()
