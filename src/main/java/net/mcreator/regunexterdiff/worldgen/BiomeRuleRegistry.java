@@ -18,6 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class BiomeRuleRegistry {
     private static final short FIRST_CUSTOM_ID = 1000;
+    public static final short FALLBACK_BIOME_ID = Short.MAX_VALUE;
+    public static final ResourceLocation FALLBACK_BIOME_KEY = ResourceLocation.withDefaultNamespace("the_void");
     private static volatile List<CustomBiomeRule> rules = List.of();
     private static volatile Map<ResourceLocation, Short> biomeIds = Map.of();
     // null means the biome registry has not yet been checked by a biome source.
@@ -66,6 +68,10 @@ public final class BiomeRuleRegistry {
         }
 
         Map<ResourceLocation, Short> assignedIds = new LinkedHashMap<>();
+        if (sortedRules.isEmpty()) {
+            // Keep the fallback available even when every rule file is absent or invalid.
+            assignedIds.put(FALLBACK_BIOME_KEY, FALLBACK_BIOME_ID);
+        }
         int nextId = FIRST_CUSTOM_ID;
         for (ResourceLocation key : uniqueBiomeKeys) {
             if (nextId > Short.MAX_VALUE) {
