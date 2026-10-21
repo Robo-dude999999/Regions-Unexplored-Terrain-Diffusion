@@ -1,12 +1,46 @@
 <img width="1920" height="1009" alt="2026-10-10_22-51-12-png" src="https://github.com/user-attachments/assets/29f56f86-8a2d-434b-abf8-5af2d5aa850b" />
-Fixes the incompatibilities between the terrain diffusion minecraft integration and regions unexplored.
 
-Most biomes for regions unexplored are currently unsupported, and will be added over the course of the near future. Some may depend on updates to terrain diffusion, such as river biomes.
+# Regions Unexplored: Terrain Diffusion
 
-Coming soon:
-  - Fabric version
-  - 1.21.11 neoforge version
+This NeoForge 1.21.1 mod provides a data-driven compatibility layer between Terrain Diffusion and third-party biome registries.
 
-Terrain diffusion is a neural network designed to generate realistic terrain and climate information based off real world data. In some cases mountains can be over 1000 blocks tall, and caves super deep. The generation is insane, but only uses vanilla biomes out of the box. Also, since it overrides the entire vanilla world generation system, no standard biome mods are compatible. I saw a reddit post where Comrade_Cydra made an experimental mod with chat GPT to integrate biomes o plenty into terrain diffusion. This inspired me to do the same, and here it is.
+Terrain Diffusion uses its own biome classifier, so this mod adds a custom rule layer that can map the classifier's raw elevation and climate values to registered biome keys.
 
-Chat GPT was used for some of the mixin initalization code.
+## Custom biome rules
+
+Rules are loaded from data-pack resources under:
+
+`data/<namespace>/terrain_diffusion_biomes/<rule_name>.json`
+
+Each rule maps the raw elevation and four climate channels passed to Terrain Diffusion's `BiomeClassifier` to a registered biome. The rule format is:
+
+```json
+{
+  "biome_key": "any_biome_mod:any_biome",
+  "priority": 100,
+  "elevation": { "min": 10, "max": 300 },
+  "climate_var_one": { "min": 10.0, "max": 30.0 },
+  "climate_var_two": { "min": 0.0, "max": 45.0 },
+  "climate_var_three": { "min": -5.0, "max": 20.0 },
+  "climate_var_four": { "min": 15.0, "max": 40.0 }
+}
+```
+
+- `priority` is optional and defaults to `0`.
+- All five ranges must match. Bounds are inclusive.
+- When multiple rules match, higher priority wins. Ties are resolved by alphabetically ascending `biome_key`, then by the data-pack resource ID for deterministic ordering.
+- Elevation and climate values are read directly from Terrain Diffusion's classifier input arrays; vanilla multi-noise parameters are not used.
+- Wetland and riverbank-like biome keys receive an additional lowland gate at 300 metres, as well as the configured elevation range.
+- A custom biome only receives a Terrain Diffusion ID when a valid rule references its key. Missing biome keys are logged and skipped.
+
+## External worldgen injection
+
+When Lithostitched wraps a Terrain Diffusion biome source, its automatic biome injectors and surface-rule additions are skipped for that Terrain Diffusion dimension. Other biome sources and dimensions keep Lithostitched's default behavior. The guard is scoped to Lithostitched; it does not disable unrelated mods' global registry or worldgen behavior.
+
+Most biomes for Regions Unexplored are currently unsupported unless a data-pack rule maps them. River biomes may require additional Terrain Diffusion support depending on the available classifier channels.
+
+Terrain Diffusion is a neural-network-based terrain generator that replaces the standard vanilla biome-selection path with its own classifier.
+
+## Build
+
+Uses Java 21 and NeoForge 21.1.255. Run `./gradlew build` (or `gradlew.bat build` on Windows).

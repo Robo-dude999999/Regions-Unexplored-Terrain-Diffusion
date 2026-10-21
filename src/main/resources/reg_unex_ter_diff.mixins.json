@@ -4,7 +4,10 @@
   "package": "net.mcreator.regunexterdiff.mixins",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "TerrainDiffusionBridge"
+    "TerrainDiffusionBridge",
+    "BiomeClassifierMixin",
+    "LithostitchedInjectorGuardMixin",
+    "LithostitchedSurfaceRuleGuardMixin"
   ],
   "injectors": {
     "defaultRequire": 0
