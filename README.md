@@ -19,7 +19,7 @@ Each rule maps the raw elevation and four climate channels passed to Terrain Dif
 - `precip`: precipitation channel
 - `p_cv`: precipitation coefficient-of-variation channel
 
-These are the **raw input channels** passed to `BiomeClassifier`, before its classification code applies temperature/precipitation noise and derives secondary values. The classifier source documents the channel order as `temp`, `t_season`, `precip`, `p_cv`. The rules therefore match those raw values, not the internally noise-adjusted `temp` or `precip` values.
+These fields are read from the per-pixel elevation and climate arrays supplied to `BiomeClassifier`. `elevation` is the decoded elevation output; `temp` is the derived per-pixel temperature after the pipeline's elevation lapse-rate adjustment; `t_season`, `precip`, and `p_cv` are the corresponding climate channels from the model output. The classifier later adds its own noise to temperature and precipitation for its native biome decision, but custom JSON rules compare against the values in these arrays exactly.
 
 Example rule:
 
@@ -36,10 +36,9 @@ Example rule:
 ```
 
 - `priority` is optional and defaults to `0`.
-- All five ranges must match. Bounds are inclusive.
+- All five ranges must match at the same pixel. Bounds are inclusive; no additional hidden elevation gate is applied.
 - When multiple rules match, higher priority wins. Ties are resolved by alphabetically ascending `biome_key`, then by the data-pack resource ID for deterministic ordering.
 - Elevation and climate values are read directly from Terrain Diffusion's classifier input arrays; vanilla multi-noise parameters are not used.
-- Wetland and riverbank-like biome keys receive an additional lowland gate at 300 metres, as well as the configured elevation range.
 - A custom biome only receives a Terrain Diffusion ID when a valid rule references its key. Missing biome keys are logged and skipped.
 
 ## External worldgen injection
