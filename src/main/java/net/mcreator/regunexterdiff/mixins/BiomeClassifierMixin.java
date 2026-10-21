@@ -2,6 +2,7 @@ package net.mcreator.regunexterdiff.mixins;
 
 import net.mcreator.regunexterdiff.worldgen.BiomeRuleRegistry;
 import net.mcreator.regunexterdiff.worldgen.CustomBiomeRule;
+import java.util.Arrays;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,6 +38,15 @@ public abstract class BiomeClassifierMixin {
                 || elevation == null || elevation.length < pixelCount
                 || climate == null || climate.length < pixelCount * 4
                 || biomeIds == null || biomeIds.length < pixelCount) {
+            return;
+        }
+
+        if (BiomeRuleRegistry.rules().isEmpty()) {
+            Short fallbackId = BiomeRuleRegistry.biomeIdFor(BiomeRuleRegistry.FALLBACK_BIOME_KEY);
+            if (fallbackId != null) {
+                Arrays.fill(biomeIds, fallbackId);
+                cir.setReturnValue(biomeIds);
+            }
             return;
         }
 
