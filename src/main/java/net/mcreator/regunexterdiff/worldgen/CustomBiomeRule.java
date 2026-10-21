@@ -28,8 +28,7 @@ public record CustomBiomeRule(
                 && temp.contains(tempValue)
                 && tSeason.contains(tSeasonValue)
                 && precip.contains(precipValue)
-                && pCv.contains(pCvValue)
-                && HydraulicIsolation.allows(biomeKey, elevationValue, elevation);
+                && pCv.contains(pCvValue);
     }
 
     public record NumericRange(float min, float max) {
