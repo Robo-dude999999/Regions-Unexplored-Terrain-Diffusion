@@ -35,8 +35,6 @@ public abstract class BiomeClassifierMixin {
         int pixelCount = height * width;
         short[] biomeIds = cir.getReturnValue();
         if (height <= 0 || width <= 0 || pixelCount <= 0
-                || elevation == null || elevation.length < pixelCount
-                || climate == null || climate.length < pixelCount * 4
                 || biomeIds == null || biomeIds.length < pixelCount) {
             return;
         }
@@ -50,6 +48,10 @@ public abstract class BiomeClassifierMixin {
             return;
         }
 
+        if (elevation == null || elevation.length < pixelCount
+                || climate == null || climate.length < pixelCount * 4) {
+            return;
+        }
         for (int index = 0; index < pixelCount; index++) {
             float elev = elevation[index];
             float temp = climate[index];
