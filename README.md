@@ -6,6 +6,12 @@ This NeoForge 1.21.1 mod provides a data-driven compatibility layer between Terr
 
 Terrain Diffusion uses its own biome classifier, so this mod adds a custom rule layer that can map the classifier's raw elevation and climate values to registered biome keys.
 
+## Built-in rules, data-pack overrides, and fallback
+
+Built-in biome rules are bundled under `data/reg_unex_ter_diff/terrain_diffusion_biomes/`. Minecraft's resource reload system loads them together with data-pack resources. To override a bundled rule, use the same namespace and exact resource path in a higher-priority data pack; the data-pack version replaces the bundled file and the new ranges are used on the next reload.
+
+If no valid biome rule JSON files are loaded, the mod logs a non-fatal warning and uses `minecraft:the_void` for every classified pixel as a fallback. Once at least one valid rule loads, normal rule matching is used.
+
 ## Custom biome rules
 
 Rules are loaded from data-pack resources under:
