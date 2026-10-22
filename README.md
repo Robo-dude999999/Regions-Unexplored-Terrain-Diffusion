@@ -4,19 +4,17 @@
 
 This NeoForge 1.21.1 mod provides a data-driven compatibility layer between Terrain Diffusion and third-party biome registries.
 
-Terrain Diffusion uses its own biome classifier, so this mod adds a custom rule layer that can map the classifier's raw elevation and climate values to registered biome keys.
+Terrain Diffusion uses its own biome classifier, so this mod adds an optional custom rule layer that can map the classifier's raw elevation and climate values to registered biome keys. This mod does not bundle biome rules for vanilla biomes; mods that need additional biome mappings should provide data-pack rules or inject into Terrain Diffusion directly.
 
-## Built-in rules, data-pack overrides, and fallback
-
-Built-in biome rules are bundled under `data/reg_unex_ter_diff/terrain_diffusion_biomes/`. Minecraft's resource reload system loads them together with data-pack resources. To override a bundled rule, use the same namespace and exact resource path in a higher-priority data pack; the data-pack version replaces the bundled file and the new ranges are used on the next reload.
-
-If no valid biome rule JSON files are loaded, the mod logs a non-fatal warning and uses `minecraft:the_void` for every classified pixel as a fallback. Once at least one valid rule loads, normal rule matching is used.
-
-## Custom biome rules
+## Custom biome rules and fallback
 
 Rules are loaded from data-pack resources under:
 
 `data/<namespace>/terrain_diffusion_biomes/<rule_name>.json`
+
+When no valid custom rules are loaded, or no rule matches a pixel, Terrain Diffusion's original biome classification is preserved. This is the vanilla biome result that would otherwise have been selected, rather than forcing the pixel to `minecraft:the_void`. Invalid rule files are skipped with warnings; if no valid rules remain, a non-fatal warning is logged and native classification continues.
+
+## Custom biome rule format
 
 Each rule maps the raw elevation and four climate channels passed to Terrain Diffusion's `BiomeClassifier` to a registered biome. The climate fields use the exact names documented in Terrain Diffusion's classifier:
 
@@ -50,8 +48,6 @@ Example rule:
 ## External worldgen injection
 
 When Lithostitched wraps a Terrain Diffusion biome source, its automatic biome injectors and surface-rule additions are skipped for that Terrain Diffusion dimension. Other biome sources and dimensions keep Lithostitched's default behavior. The guard is scoped to Lithostitched; it does not disable unrelated mods' global registry or worldgen behavior.
-
-Most biomes for Regions Unexplored are currently unsupported unless a data-pack rule maps them. River biomes may require additional Terrain Diffusion support depending on the available classifier channels.
 
 Terrain Diffusion is a neural-network-based terrain generator that replaces the standard vanilla biome-selection path with its own classifier.
 
