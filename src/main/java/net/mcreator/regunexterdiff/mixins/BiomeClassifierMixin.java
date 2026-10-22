@@ -2,7 +2,6 @@ package net.mcreator.regunexterdiff.mixins;
 
 import net.mcreator.regunexterdiff.worldgen.BiomeRuleRegistry;
 import net.mcreator.regunexterdiff.worldgen.CustomBiomeRule;
-import java.util.Arrays;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,19 +38,15 @@ public abstract class BiomeClassifierMixin {
             return;
         }
 
-        if (BiomeRuleRegistry.rules().isEmpty()) {
-            Short fallbackId = BiomeRuleRegistry.biomeIdFor(BiomeRuleRegistry.FALLBACK_BIOME_KEY);
-            if (fallbackId != null) {
-                Arrays.fill(biomeIds, fallbackId);
-                cir.setReturnValue(biomeIds);
-            }
-            return;
-        }
-
-        if (elevation == null || elevation.length < pixelCount
+        // No matching custom rule means Terrain Diffusion's original vanilla
+        // classification remains in place. This also provides the fallback
+        // when a rule references a biome that is not registered.
+        if (BiomeRuleRegistry.rules().isEmpty()
+                || elevation == null || elevation.length < pixelCount
                 || climate == null || climate.length < pixelCount * 4) {
             return;
         }
+
         for (int index = 0; index < pixelCount; index++) {
             float elev = elevation[index];
             float temp = climate[index];
